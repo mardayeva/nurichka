@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card-glass p-4">
+  <div class="d-flex justify-content-between align-items-center">
+    <div>
+      <h3 class="fw-bold mb-1">{{ assignment.title }} - Yuborilganlar</h3>
+      <div class="text-secondary">Topshiriq javoblari va baholash</div>
+    </div>
+    <a class="btn btn-glass" href="{% url 'assignment_manage' assignment.course.id %}">Topshiriqlarga qaytish</a>
+  </div>
+
+  <div class="vstack gap-2 mt-3">
+    {% for r in rows %}
+      <div class="stat-card">
+        <div class="fw-semibold">{{ r.student.get_full_name|default:r.student.username }}</div>
+        <div class="text-secondary small mt-1">Yuborilgan: {{ r.submitted_at|date:"Y-m-d H:i" }}</div>
+        {% if r.text_answer %}<div class="text-secondary small mt-1">{{ r.text_answer|truncatechars:220 }}</div>{% endif %}
+        {% if r.file %}<a class="btn btn-sm btn-glass mt-2" href="{{ r.file.url }}" target="_blank">Faylni ochish</a>{% endif %}
+        <form method="post" class="row mt-2">
+          {% csrf_token %}
+          <input type="hidden" name="submission_id" value="{{ r.id }}">
+          <input class="form-control" type="number" name="score" min="0" max="{{ assignment.max_score }}" value="{{ r.score|default:'' }}" placeholder="Ball">
+          <textarea class="form-control" name="feedback" rows="2" placeholder="Feedback">{{ r.feedback }}</textarea>
+          <button class="btn btn-primary" type="submit">Baholashni saqlash</button>
+        </form>
+      </div>
+    {% empty %}
+      <div class="text-secondary">Hali topshiriq yuborilmagan.</div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

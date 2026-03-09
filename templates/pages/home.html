@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="promo-hero">
+  <div class="promo-overlay"></div>
+  <div class="promo-inner">
+    <div class="home-kicker">{{ site_meta.name|upper }}</div>
+    <h1>Kelajagingizni bugundan boshlang</h1>
+    <p>
+      Nurichka o'quv markazida zamonaviy kasblarni amaliy loyihalar orqali o'rganing.
+      Kuchli mentorlar, aniq nazorat va haqiqiy natijaga olib boradigan ta'lim tizimi.
+    </p>
+    <div class="d-flex gap-2 mt-3">
+      {% if request.user.is_authenticated %}
+        <a class="btn btn-primary" href="{% url 'after_login' %}">Darsimni davom ettirish</a>
+      {% else %}
+        <a class="btn btn-primary" href="{% url 'register' %}">Hoziroq ro'yxatdan o'ting</a>
+        <a class="btn btn-glass" href="{% url 'login' %}">Shaxsiy kabinetga kirish</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="section-v2 mt-3">
+  <h3 class="fw-bold mb-2">Nega aynan biz?</h3>
+  <div class="promo-grid">
+    <article class="promo-tile promo-tile-1">
+      <div class="promo-content">
+        <h4>Amaliy kurslar</h4>
+        <p>Video, material va topshiriqlar bilan to'liq o'quv yo'li.</p>
+      </div>
+    </article>
+    <article class="promo-tile promo-tile-2">
+      <div class="promo-content">
+        <h4>Monitoring tizimi</h4>
+        <p>O'zlashtirish foizi va test natijalari aniq ko'rinadi.</p>
+      </div>
+    </article>
+    <article class="promo-tile promo-tile-3">
+      <div class="promo-content">
+        <h4>Rasmli sertifikat</h4>
+        <p>Kursni yakunlagan o'quvchi uchun chiroyli sertifikat beriladi.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section-v2 mt-3">
+  <h3 class="fw-bold mb-2">Bo'limlar</h3>
+  <div class="grid-v2 mt-2">
+    <article class="info-box clickable-box">
+      <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mb-1">O'qituvchilar</h5>
+        <a class="btn btn-sm btn-glass" href="{% url 'teachers_page' %}">Ko'rish</a>
+      </div>
+      <p>Mutaxassislar va ularning kurslari bilan tanishing.</p>
+    </article>
+
+    <article class="info-box clickable-box">
+      <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mb-1">O'quvchilar</h5>
+        <a class="btn btn-sm btn-glass" href="{% url 'students_page' %}">Ko'rish</a>
+      </div>
+      <p>O'quvchilar o'zlashtirish holatini alohida sahifada kuzating.</p>
+    </article>
+
+    <article class="info-box clickable-box">
+      <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mb-1">Kurslar va topshiriqlar</h5>
+        {% if request.user.is_authenticated %}
+          <a class="btn btn-sm btn-glass" href="{% url 'after_login' %}">Ochish</a>
+        {% else %}
+          <a class="btn btn-sm btn-glass" href="{% url 'register' %}">Boshlash</a>
+        {% endif %}
+      </div>
+      <p>Topshiriq, test va baholash bilan professional ta'lim jarayoni.</p>
+    </article>
+  </div>
+</section>
+
+<section class="promo-cta mt-3">
+  <h3>Har bir dars sizni maqsadga yaqinlashtiradi</h3>
+  <p>Bugun ro'yxatdan o'ting va professionallikka olib boradigan yo'lni boshlang.</p>
+  {% if request.user.is_authenticated %}
+    <a class="btn btn-primary" href="{% url 'after_login' %}">Panelga o'tish</a>
+  {% else %}
+    <a class="btn btn-primary" href="{% url 'register' %}">Bepul ro'yxatdan o'tish</a>
+  {% endif %}
+</section>
+{% endblock %}

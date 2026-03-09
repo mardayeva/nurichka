@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card-glass p-4">
+  <div class="d-flex justify-content-between align-items-center">
+    <div>
+      <h3 class="fw-bold mb-1">Topshiriqlar: {{ course.title }}</h3>
+      <div class="text-secondary">O'quvchilarga topshiriq berish</div>
+    </div>
+    <a class="btn btn-glass" href="{% url 'teacher_course_detail' course.id %}">Kursga qaytish</a>
+  </div>
+
+  <div class="row mt-3">
+    <section class="card-glass p-3">
+      <div class="fw-semibold mb-2">Yangi topshiriq</div>
+      <form method="post" class="vstack gap-2">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary" type="submit">Saqlash</button>
+      </form>
+    </section>
+
+    <section class="card-glass p-3">
+      <div class="fw-semibold mb-2">Mavjud topshiriqlar</div>
+      <div class="vstack gap-2">
+        {% for a in assignments %}
+          <div class="stat-card">
+            <div class="fw-semibold">{{ a.title }}</div>
+            <div class="text-secondary small">{{ a.description|truncatechars:120 }}</div>
+            <div class="text-secondary small mt-1">Maks ball: {{ a.max_score }}</div>
+            <a class="btn btn-sm btn-glass mt-2" href="{% url 'assignment_submissions' a.id %}">Yuborilganlar</a>
+          </div>
+        {% empty %}
+          <div class="text-secondary">Hozircha topshiriq yo'q.</div>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card-glass p-4">
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <div>
+      <h3 class="fw-bold mb-1">{{ course.title }}</h3>
+      <div class="text-secondary">KOD: <span class="badge text-bg-light">{{ course.code }}</span></div>
+    </div>
+    <div class="d-flex gap-2">
+      <a class="btn btn-glass" href="{% url 'teacher_course_students' course.id %}">O'quvchilar ro'yxati</a>
+      <a class="btn btn-glass" href="{% url 'assignment_manage' course.id %}">Topshiriqlar</a>
+      <a class="btn btn-glass" href="{% url 'module_create' course.id %}">Mavzu qo'shish</a>
+    </div>
+  </div>
+
+  <div class="fw-semibold mb-2 mt-3">Mavzular</div>
+  <div class="row g-3">
+    {% for m in modules %}
+      <div class="col-md-6">
+        <div class="card-glass p-3">
+          <div class="fw-semibold">{{ m.order }}. {{ m.title }}</div>
+          <div class="text-secondary small">Passing: {{ m.passing_score }}</div>
+
+          <div class="mt-2 d-flex gap-2">
+            <a class="btn btn-sm btn-primary" href="{% url 'quiz_manage_for_module' m.id %}">Testni tahrirlash</a>
+            {% if m.quiz %}
+              <span class="badge text-bg-light">Quiz: bor</span>
+            {% else %}
+              <span class="badge text-bg-secondary">Quiz: yo'q</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="text-secondary">Hozircha mavzu yo'q.</div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+<nav class="navbar">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'home' %}">
+      <span class="brand-dot"></span>
+      {{ site_meta.short_name }}
+    </a>
+    <div class="navbar-nav gap-2">
+      {% if request.user.is_authenticated %}
+        <a class="btn btn-sm btn-glass" href="{% url 'home' %}">Bosh sahifa</a>
+        <a class="btn btn-sm btn-glass" href="{% url 'after_login' %}">Panel</a>
+        {% if request.user.profile.role == "CENTER_ADMIN" %}
+          <a class="btn btn-sm btn-glass" href="{% url 'center_dashboard' %}">Markaz</a>
+        {% endif %}
+        <a class="btn btn-sm btn-glass" href="{% url 'profile' %}">Profil</a>
+        <form method="post" action="{% url 'logout' %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-sm btn-outline-secondary">Chiqish</button>
+        </form>
+      {% else %}
+        <a class="btn btn-sm btn-glass" href="{% url 'home' %}">Markaz</a>
+        <a class="btn btn-sm btn-glass" href="{% url 'teachers_page' %}">O'qituvchilar</a>
+        <a class="btn btn-sm btn-glass" href="{% url 'students_page' %}">O'quvchilar</a>
+        <a class="btn btn-sm btn-glass" href="{% url 'login' %}">Kirish</a>
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'register' %}">Ro'yxatdan o'tish</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>

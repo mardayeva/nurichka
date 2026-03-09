@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card-glass p-4 module-page">
+  <div class="module-layout lesson-layout">
+    <section class="lesson-content">
+      <h3 class="fw-bold mb-1">{{ module.order }}. {{ module.title }}</h3>
+
+      {% if module.video_url %}
+        <div class="card-glass p-3 mt-3 lesson-block" id="video-dars">
+          <div class="fw-semibold mb-1">Video dars</div>
+          <a class="btn btn-glass" target="_blank" href="{{ module.video_url }}">Videoni ochish</a>
+        </div>
+      {% endif %}
+
+      {% if sections %}
+        {% for sec in sections %}
+          <article class="card-glass p-3 mt-3 lesson-block" id="{{ sec.id }}">
+            <h4 class="fw-semibold mb-2">{{ sec.title }}</h4>
+            <div class="text-secondary">{{ sec.body|linebreaks }}</div>
+          </article>
+        {% endfor %}
+      {% elif module.content %}
+        <article class="card-glass p-3 mt-3 lesson-block" id="mavzu-matni">
+          <h4 class="fw-semibold mb-2">Mavzu matni</h4>
+          <div class="text-secondary">{{ module.content|linebreaks }}</div>
+        </article>
+      {% endif %}
+
+      {% if module_image_url or image_links %}
+        <article class="card-glass p-3 mt-3 lesson-block" id="rasmlar">
+          <h4 class="fw-semibold mb-2">Rasmli tushuntirish</h4>
+          <div class="module-gallery">
+            {% if module_image_url %}
+              <img src="{{ module_image_url }}" alt="Mavzu rasmi">
+            {% endif %}
+            {% for img in image_links %}
+              <img src="{{ img }}" alt="Mavzu rasmi {{ forloop.counter }}">
+            {% endfor %}
+          </div>
+        </article>
+      {% endif %}
+
+      {% if doc_links %}
+        <article class="card-glass p-3 mt-3 lesson-block" id="resurslar">
+          <h4 class="fw-semibold mb-2">Qo'shimcha resurslar</h4>
+          <div class="vstack gap-2">
+            {% for ln in doc_links %}
+              <a class="btn btn-sm btn-glass" target="_blank" href="{{ ln }}">{{ ln }}</a>
+            {% endfor %}
+          </div>
+        </article>
+      {% endif %}
+
+      <form method="post" class="mt-4">
+        {% csrf_token %}
+        <button class="btn btn-primary w-100">Mavzuni tugatdim (testga o'tish)</button>
+      </form>
+    </section>
+
+    <aside class="module-toc card-glass p-3 lesson-sidebar">
+      <div class="fw-bold mb-2">MUNDARIJA</div>
+      <div class="vstack gap-2">
+        {% if module.video_url %}<a class="toc-link" href="#video-dars">Video dars</a>{% endif %}
+        {% for sec in sections %}
+          <a class="toc-link" href="#{{ sec.id }}">{{ sec.title }}</a>
+        {% endfor %}
+        {% if not sections and module.content %}
+          <a class="toc-link" href="#mavzu-matni">Mavzu matni</a>
+        {% endif %}
+        {% if module_image_url or image_links %}<a class="toc-link" href="#rasmlar">Rasmli tushuntirish</a>{% endif %}
+        {% if doc_links %}<a class="toc-link" href="#resurslar">Qo'shimcha resurslar</a>{% endif %}
+      </div>
+    </aside>
+  </div>
+</div>
+{% endblock %}

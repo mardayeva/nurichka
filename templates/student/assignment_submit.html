@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card-glass p-4">
+  <div class="d-flex justify-content-between align-items-center">
+    <div>
+      <h3 class="fw-bold mb-1">{{ assignment.title }}</h3>
+      <div class="text-secondary">Topshiriqni yuborish</div>
+    </div>
+    <a class="btn btn-glass" href="{% url 'student_assignments' assignment.course.id %}">Topshiriqlarga qaytish</a>
+  </div>
+
+  <div class="text-secondary small mt-2">{{ assignment.description }}</div>
+  <div class="text-secondary small">Maks ball: {{ assignment.max_score }}</div>
+
+  <form method="post" enctype="multipart/form-data" class="vstack gap-2 mt-3">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-primary" type="submit">Yuborish</button>
+  </form>
+
+  {% if submission.score is not None %}
+    <div class="alert alert-info mt-3">Baholangan ball: {{ submission.score }}</div>
+  {% endif %}
+  {% if submission.feedback %}
+    <div class="alert alert-success">{{ submission.feedback }}</div>
+  {% endif %}
+</div>
+{% endblock %}

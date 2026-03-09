@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card-glass p-4">
+  <h3 class="fw-bold mb-1">Mening profilim</h3>
+  <div class="text-secondary mb-3">O'qituvchi yoki talaba ma'lumotlarini saqlash</div>
+
+  <div class="row">
+    <section class="card-glass p-3">
+      <div class="fw-semibold">Asosiy ma'lumot</div>
+      {% if profile.avatar %}
+        <div class="mt-2">
+          <img src="{{ profile.avatar.url }}" alt="Avatar" style="width:88px;height:88px;object-fit:cover;border-radius:50%;border:2px solid #d6e3f0;">
+        </div>
+      {% endif %}
+      <div class="text-secondary small mt-2">Username: {{ request.user.username }}</div>
+      <div class="text-secondary small">Email: {{ request.user.email }}</div>
+      <div class="text-secondary small">Role: {{ profile.get_role_display }}</div>
+    </section>
+    <section class="card-glass p-3">
+      <div class="fw-semibold">Tahrirlash</div>
+      <form method="post" enctype="multipart/form-data" class="vstack gap-2 mt-2 auth-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Saqlash</button>
+      </form>
+    </section>
+  </div>
+</div>
+{% endblock %}

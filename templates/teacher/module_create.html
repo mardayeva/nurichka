@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="module-create-wrap">
+  <div class="module-create-col">
+    <div class="card-glass p-4">
+      <h4 class="fw-bold mb-2">Mavzu qo'shish: {{ course.title }}</h4>
+      <div class="text-secondary mb-3">Video, matn, rasm va resurs fayl/link qo'shishingiz mumkin.</div>
+      <form method="post" enctype="multipart/form-data" class="vstack gap-3 auth-form">
+        {% csrf_token %}
+
+        <div class="field">
+          <label for="{{ form.title.id_for_label }}">Mavzu nomi</label>
+          {{ form.title }}
+        </div>
+        <div class="field">
+          <label for="{{ form.order.id_for_label }}">Tartib raqami</label>
+          {{ form.order }}
+        </div>
+        <div class="field">
+          <label for="{{ form.video_url.id_for_label }}">Video link (ixtiyoriy)</label>
+          {{ form.video_url }}
+        </div>
+        <div class="field">
+          <label for="{{ form.content.id_for_label }}">Mavzu matni</label>
+          {{ form.content }}
+        </div>
+        <div class="field">
+          <label for="{{ form.resource_file.id_for_label }}">Fayl resurs (Rasm/PDF/DOCX/PPT)</label>
+          {{ form.resource_file }}
+          <div class="help">Rasm yuklash uchun: PNG, JPG, JPEG, WEBP, GIF, SVG</div>
+        </div>
+        <div class="field">
+          <label for="{{ form.resource_links.id_for_label }}">Qo'shimcha linklar</label>
+          {{ form.resource_links }}
+        </div>
+        <div class="field">
+          <label for="{{ form.passing_score.id_for_label }}">Testdan o'tish bali</label>
+          {{ form.passing_score }}
+        </div>
+
+        <button class="btn btn-glass w-100">Saqlash</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

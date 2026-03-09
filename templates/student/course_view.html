@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card-glass p-4">
+  <div class="d-flex justify-content-between align-items-center course-head">
+    <h3 class="fw-bold mb-1">{{ course.title }}</h3>
+    <a class="btn btn-sm btn-glass" href="{% url 'student_assignments' course.id %}">Topshiriqlar</a>
+  </div>
+  <div class="text-secondary mb-3">Mavzular va ketma-ket o'qish tartibi</div>
+
+  <div class="course-shell">
+    <aside class="course-side">
+      <div class="card-glass p-3 mb-3">
+        <div class="fw-semibold">O'zlashtirish tahlili</div>
+        <div class="text-secondary small mt-2">Umumiy foiz: <strong>{{ ai_report.percentage }}%</strong></div>
+        <div class="text-secondary small">Ball: {{ ai_report.total_score }} / {{ ai_report.max_score }}</div>
+        <div class="text-secondary small">Topshiriq: {{ ai_report.assignment_total_score }} / {{ ai_report.assignment_max_score }}</div>
+        <div class="text-secondary small">Progress: {{ ai_report.completed_modules }} / {{ ai_report.total_modules }} mavzu</div>
+        <div class="text-secondary small">Quiz: {{ ai_report.solved_quizzes }} / {{ ai_report.total_quizzes }} yechilgan</div>
+        <div class="text-secondary small">Topshiriq soni: {{ ai_report.submitted_assignments }} / {{ ai_report.total_assignments }} yuborilgan</div>
+        <div class="mt-2">
+          {% if certificate %}
+            <span class="badge text-bg-light">Sertifikat berildi (rasmli)</span>
+            {% if certificate.file %}
+              <a class="btn btn-sm btn-primary mt-2" href="{{ certificate.file.url }}" target="_blank">Sertifikatni ochish</a>
+            {% endif %}
+          {% else %}
+            <span class="badge text-bg-secondary">{{ ai_report.reason }}</span>
+            <div class="text-secondary small mt-2">Shart: barcha mavzu testlari + topshiriq ballari hisobga olinadi + kamida {{ ai_report.minimum_percent }}%</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="card-glass p-3">
+        <div class="fw-semibold">Fan o'qituvchisi</div>
+        <div class="text-secondary small mt-1">
+          {% if teacher_profile.full_name %}{{ teacher_profile.full_name }}{% else %}{{ course.teacher.username }}{% endif %}
+          {% if teacher_profile.specialization %} | {{ teacher_profile.specialization }}{% endif %}
+        </div>
+        {% if teacher_profile.center_name %}
+          <div class="text-secondary small">Markaz: {{ teacher_profile.center_name }}</div>
+        {% endif %}
+        {% if teacher_profile.bio %}
+          <div class="text-secondary small mt-2">{{ teacher_profile.bio }}</div>
+        {% endif %}
+      </div>
+    </aside>
+
+    <section class="course-modules">
+      <div class="modules-title">MUNDARIJA</div>
+      {% for item in cards %}
+        <article class="module-row card-glass p-3">
+          <div class="module-row-head">
+            <span class="module-order">Mavzu {{ item.m.order }}</span>
+            {% if item.done %}
+              <span class="badge text-bg-light">Tugagan</span>
+            {% elif item.unlocked %}
+              <span class="badge text-bg-secondary">Ochiq</span>
+            {% else %}
+              <span class="badge text-bg-secondary">Qulflangan</span>
+            {% endif %}
+          </div>
+          <div class="fw-semibold">{{ item.m.title }}</div>
+          <div class="mt-2 d-flex justify-content-end align-items-center">
+            {% if item.unlocked %}
+              <a class="btn btn-sm btn-glass" href="{% url 'module_view' item.m.id %}">Kirish</a>
+            {% else %}
+              <button class="btn btn-sm btn-outline-light" disabled>Yopiq</button>
+            {% endif %}
+            </div>
+        </article>
+      {% endfor %}
+    </section>
+  </div>
+</div>
+{% endblock %}

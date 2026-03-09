@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card-glass p-4 student-dashboard">
+  <div class="student-dashboard-head">
+    <div class="student-dashboard-title">
+      <h3 class="fw-bold mb-1">Talaba paneli</h3>
+      <div class="text-secondary">Kurslar, progres va sertifikatlar</div>
+    </div>
+    <div class="student-dashboard-nav">
+      <a class="btn btn-glass" href="{% url 'home' %}">Bosh sahifa</a>
+      <a class="btn btn-glass" href="{% url 'join_course' %}">Kursga qo'shilish</a>
+      <a class="btn btn-glass" href="{% url 'student_progress' %}">O'zlashtirishim</a>
+      <a class="btn btn-glass" href="{% url 'my_certificates' %}">Sertifikatlar</a>
+    </div>
+  </div>
+
+  <div class="student-stats-grid mt-3">
+    <div class="stat-card">
+      <div class="text-secondary small">Mening kurslarim</div>
+      <div class="value mt-2">{{ stats.course_count }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="text-secondary small">Tugatilgan modullar</div>
+      <div class="value mt-2">{{ stats.completed_modules }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="text-secondary small">Olingan sertifikatlar</div>
+      <div class="value mt-2">{{ stats.certificate_count }}</div>
+    </div>
+  </div>
+
+  {% if stats.pending_assignment_count %}
+    <section class="student-alert mt-3">
+      <div class="student-alert-head">
+        <strong>Yangi topshiriq bor: {{ stats.pending_assignment_count }} ta</strong>
+      </div>
+      <div class="student-alert-list mt-2">
+        {% for a in pending_assignments %}
+          <a class="student-alert-item" href="{% url 'student_assignments' a.course.id %}">
+            <span class="fw-semibold">{{ a.course.title }}</span>
+            <span class="text-secondary small">{{ a.title }}</span>
+          </a>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  <div class="student-courses-grid mt-2">
+    {% for c in courses %}
+      <article class="card-glass p-3 student-course-card">
+        <div class="fw-semibold">{{ c.title }}</div>
+        <div class="text-secondary small">{{ c.subject }}</div>
+        <div class="text-secondary small mt-2"><i class="bi bi-person-badge"></i> O'qituvchi: {{ c.teacher.username }}</div>
+        <div class="mt-2 d-flex justify-content-end">
+          <a class="btn btn-sm btn-glass" href="{% url 'student_course_view' c.id %}">Ochish</a>
+        </div>
+      </article>
+    {% empty %}
+      <div class="text-secondary mt-3">Hozircha kurs yo'q. Kod orqali qo'shiling.</div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

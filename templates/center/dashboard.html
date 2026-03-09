@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card-glass p-4">
+  <div class="d-flex justify-content-between align-items-center">
+    <div>
+      <h3 class="fw-bold mb-1">O'quv markaz paneli</h3>
+      <div class="text-secondary mb-3">O'qituvchi va kurslarni biriktirish boshqaruvi</div>
+    </div>
+    <a class="btn btn-glass" href="{% url 'home' %}">Bosh sahifa</a>
+  </div>
+
+  {% if not center %}
+    <div class="card-glass p-3">
+      <div class="fw-semibold mb-2">Markaz yaratish</div>
+      <form method="post" class="vstack gap-2">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="create_center">
+        <input class="form-control" type="text" name="name" placeholder="Markaz nomi">
+        <input class="form-control" type="text" name="phone" placeholder="Telefon">
+        <input class="form-control" type="text" name="address" placeholder="Manzil">
+        <button class="btn btn-primary" type="submit">Yaratish</button>
+      </form>
+    </div>
+  {% else %}
+    <div class="row row-3">
+      <div class="stat-card">
+        <div class="text-secondary small">Markaz</div>
+        <div class="fw-semibold mt-2">{{ center.name }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="text-secondary small">O'qituvchilar</div>
+        <div class="value mt-2">{{ stats.teacher_count }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="text-secondary small">Kurslar</div>
+        <div class="value mt-2">{{ stats.course_count }}</div>
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <section class="card-glass p-3">
+        <div class="fw-semibold mb-2">O'qituvchini markazga biriktirish</div>
+        <form method="post" class="vstack gap-2">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="assign_teacher">
+          <select class="form-control" name="teacher_id" required>
+            <option value="">O'qituvchi tanlang</option>
+            {% for t in teachers %}
+              <option value="{{ t.user_id }}">
+                {{ t.full_name|default:t.user.username }}{% if t.center %} ({{ t.center.name }}){% endif %}
+              </option>
+            {% endfor %}
+          </select>
+          <button class="btn btn-glass" type="submit">Biriktirish</button>
+        </form>
+      </section>
+
+      <section class="card-glass p-3">
+        <div class="fw-semibold mb-2">Kursga o'qituvchi biriktirish</div>
+        <form method="post" class="vstack gap-2">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="assign_course_teacher">
+          <select class="form-control" name="course_id" required>
+            <option value="">Kurs tanlang</option>
+            {% for c in center_courses %}
+              <option value="{{ c.id }}">{{ c.title }} ({{ c.code }})</option>
+            {% endfor %}
+          </select>
+          <select class="form-control" name="teacher_id" required>
+            <option value="">O'qituvchi tanlang</option>
+            {% for t in center_teachers %}
+              <option value="{{ t.user_id }}">{{ t.full_name|default:t.user.username }}</option>
+            {% endfor %}
+          </select>
+          <button class="btn btn-glass" type="submit">Tayinlash</button>
+        </form>
+      </section>
+    </div>
+
+    <div class="card-glass p-3 mt-3">
+      <div class="fw-semibold mb-2">Yangi kurs yaratish (markaz nomidan)</div>
+      <form method="post" class="vstack gap-2">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="create_course">
+        <input class="form-control" type="text" name="title" placeholder="Kurs nomi" required>
+        <input class="form-control" type="text" name="subject" placeholder="Fan yo'nalishi">
+        <textarea class="form-control" name="description" rows="3" placeholder="Kurs tavsifi"></textarea>
+        <select class="form-control" name="teacher_id" required>
+          <option value="">O'qituvchi tanlang</option>
+          {% for t in center_teachers %}
+            <option value="{{ t.user_id }}">{{ t.full_name|default:t.user.username }}</option>
+          {% endfor %}
+        </select>
+        <button class="btn btn-primary" type="submit">Kurs yaratish</button>
+      </form>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card-glass p-4">
+  <h3 class="fw-bold mb-1">Mening sertifikatlarim</h3>
+  <div class="text-secondary mb-3">Yakunlagan kurslar bo'yicha sertifikatlar</div>
+
+  <div class="row">
+    {% for cert in certs %}
+      <div class="card-glass p-3">
+        <div class="fw-semibold">{{ cert.course.title }}</div>
+        <div class="text-secondary small mt-1">ID: {{ cert.certificate_id }}</div>
+        <div class="text-secondary small">Natija: {{ cert.total_score }} / {{ cert.max_score }} ({{ cert.percentage }}%)</div>
+        <div class="text-secondary small">Sana: {{ cert.issued_at|date:"Y-m-d H:i" }}</div>
+        {% if cert.file %}
+          {% if ".svg" in cert.file.url %}
+            <div class="mt-2">
+              <img src="{{ cert.file.url }}" alt="Certificate preview" style="width:100%;max-width:480px;border-radius:10px;border:1px solid #d6e4f1;">
+            </div>
+          {% endif %}
+          <a class="btn btn-sm btn-glass mt-2" href="{{ cert.file.url }}" target="_blank">Sertifikatni ochish</a>
+        {% endif %}
+      </div>
+    {% empty %}
+      <div class="text-secondary">Hozircha sertifikat yo'q.</div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
