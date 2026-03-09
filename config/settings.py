@@ -21,8 +21,9 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "change-me-in-production")
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
 default_hosts = "127.0.0.1,localhost"
-ALLOWED_HOSTS = [h.strip() for h in os.getenv("ALLOWED_HOSTS", default_hosts).split(",") if h.strip()]
+ALLOWED_HOSTS = [ "nurichka.onrender.com","localhost","127.0.0.1"]
 
+                 
 
 # Application definition
 
@@ -49,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 if importlib.util.find_spec("whitenoise") is not None:
